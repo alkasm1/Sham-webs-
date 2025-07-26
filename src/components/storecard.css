@@ -1,0 +1,31 @@
+.store-card {
+  display: flex;
+  flex-direction: row-reverse;
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  margin: 16px 0;
+  direction: rtl;
+}
+
+.store-image {
+  width: 160px;
+  object-fit: cover;
+}
+
+.store-details {
+  padding: 16px;
+  text-align: right;
+}
+
+.store-name {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.store-description {
+  color: #555;
+  line-height: 1.6;
+}
