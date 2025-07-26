@@ -1,27 +1,42 @@
 .home-container {
   padding: 40px;
-  font-family: 'Segoe UI', sans-serif;
   background-color: #f5f7fa;
-  text-align: center;
+  direction: rtl;
+  font-family: 'Cairo', sans-serif;
 }
 
-.title {
-  font-size: 32px;
-  margin-bottom: 10px;
-  color: #333;
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.login-button {
+  background-color: #0077cc;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.login-button:hover {
+  background-color: #005fa3;
 }
 
 .subtitle {
   font-size: 18px;
-  color: #777;
   margin-bottom: 30px;
+  color: #555;
+  text-align: center;
 }
 
 .store-list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   gap: 25px;
+  justify-content: center;
 }
 
 .store-card {
@@ -39,10 +54,20 @@
 
 .store-info {
   padding: 15px;
-  text-align: left;
+  text-align: right;
 }
 
-.store-info h3 {
-  margin: 0 0 8px;
-  color: #0066cc;
+.view-button {
+  display: inline-block;
+  margin-top: 10px;
+  background-color: #28a745;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.view-button:hover {
+  background-color: #218838;
 }
