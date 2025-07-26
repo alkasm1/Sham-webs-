@@ -1,3 +1,4 @@
+import './StoreCard.css';
 import React from 'react';
 import './StoreCard.css';
 
