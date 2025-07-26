@@ -4,32 +4,29 @@ import './Home.css';
 const stores = [
   {
     id: 1,
-    name: 'متجر الأنوار',
-    city: 'باريس',
+    name: 'ألبسة الشباب',
+    city: 'دمشق',
     image: 'https://via.placeholder.com/250x160?text=Store+1',
-    description: 'أفضل متجر للإلكترونيات في باريس، بضمان وأسعار منافسة.',
+    description: 'أحدث صيحات الألبسة الرجالية بأسعار مميزة.',
   },
   {
     id: 2,
-    name: 'زهرة الشرق',
-    city: 'ليون',
+    name: 'حلويات السعادة',
+    city: 'حلب',
     image: 'https://via.placeholder.com/250x160?text=Store+2',
-    description: 'متخصص في المنتجات الطبيعية والعناية بالبشرة.',
-  },
-  {
-    id: 3,
-    name: 'أزياء شام',
-    city: 'مارسيليا',
-    image: 'https://via.placeholder.com/250x160?text=Store+3',
-    description: 'أحدث صيحات الموضة الرجالية والنسائية.',
+    description: 'أطيب الحلويات الشرقية والغربية منذ عام 1985.',
   },
 ];
 
 function Home() {
   return (
     <div className="home-container">
-      <h1 className="title">مرحباً بك يا شام 👋</h1>
-      <p className="subtitle">اكتشف أفضل المتاجر حسب مدينتك</p>
+      <header className="home-header">
+        <h1>منصة Sham Webs</h1>
+        <a href="/login" className="login-button">تسجيل الدخول</a>
+      </header>
+
+      <p className="subtitle">🛍 اختر مدينتك لاكتشاف المتاجر المحلية</p>
 
       <div className="store-list">
         {stores.map((store) => (
@@ -39,6 +36,7 @@ function Home() {
               <h3>{store.name}</h3>
               <p><strong>المدينة:</strong> {store.city}</p>
               <p>{store.description}</p>
+              <a href={`/store/${store.id}`} className="view-button">عرض المتجر</a>
             </div>
           </div>
         ))}
