@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shamwebs Marketplace - منصة المتاجر الرقمية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        secondary: '#6366f1',
+                        accent: '#8b5cf6'
+                    },
+                    fontFamily: {
+                        arabic: ['Tajawal', 'Arial', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700&display=swap');
+        * {
+            font-family: 'Tajawal', Arial, sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 space-x-reverse">
+                    <div class="w-12 h-12 bg-gradient-to-r from-primary to-accent rounded-full flex items-center justify-center">
+                        <i class="fas fa-shopping-bag text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-primary">Shamwebs</h1>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">منصة المتاجر الرقمية</p>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="hidden md:flex items-center space-x-6 space-x-reverse">
+                    <button onclick="showSection('home')" class="nav-btn text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">الرئيسية</button>
+                    <button onclick="showSection('stores')" class="nav-btn text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">المتاجر</button>
+                    <button onclick="showSection('products')" class="nav-btn text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">المنتجات الرقمية</button>
+                    <button onclick="showSection('about')" class="nav-btn text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">من نحن</button>
+                </nav>
+
+                <!-- User Actions & Cart & Mobile Menu -->
+                <div class="flex items-center space-x-3 space-x-reverse">
+                    <!-- User Profile / Login -->
+                    <div id="userSection" class="flex items-center space-x-3 space-x-reverse">
+                        <!-- When not logged in -->
+                        <div id="notLoggedIn" class="flex items-center space-x-2 space-x-reverse">
+                            <button onclick="showLoginModal()" class="hidden md:block bg-primary text-white px-4 py-2 rounded-lg hover:bg-secondary transition-colors">
+                                تسجيل الدخول
+                            </button>
+                            <button onclick="showRegisterModal()" class="hidden md:block text-primary hover:text-secondary transition-colors">
+                                إنشاء حساب
+                            </button>
+                        </div>
+                        
+                        <!-- When logged in -->
+                        <div id="loggedIn" class="hidden flex items-center space-x-3 space-x-reverse">
+                            <div class="flex items-center space-x-2 space-x-reverse">
+                                <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                                    <i class="fas fa-user text-white text-sm"></i>
+                                </div>
+                                <span id="userName" class="text-sm font-medium text-gray-700 dark:text-gray-300"></span>
+                            </div>
+                            <button onclick="logout()" class="text-gray-500 hover:text-red-500 transition-colors">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button onclick="toggleCart()" class="relative p-2 text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span id="cartCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </button>
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-gray-700 dark:text-gray-300">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="hidden md:hidden mt-4 pb-4 border-t border-gray-200 dark:border-gray-700">
+                <nav class="flex flex-col space-y-3 mt-4">
+                    <button onclick="showSection('home')" class="text-right text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">الرئيسية</button>
+                    <button onclick="showSection('stores')" class="text-right text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">المتاجر</button>
+                    <button onclick="showSection('products')" class="text-right text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">المنتجات الرقمية</button>
+                    <button onclick="showSection('about')" class="text-right text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">من نحن</button>
+                    
+                    <!-- Mobile Auth Section -->
+                    <div id="mobileNotLoggedIn" class="pt-3 border-t border-gray-200 dark:border-gray-600 space-y-2">
+                        <button onclick="showLoginModal(); toggleMobileMenu();" class="w-full text-right bg-primary text-white px-4 py-2 rounded-lg hover:bg-secondary transition-colors">
+                            تسجيل الدخول
+                        </button>
+                        <button onclick="showRegisterModal(); toggleMobileMenu();" class="w-full text-right text-primary hover:text-secondary transition-colors">
+                            إنشاء حساب
+                        </button>
+                    </div>
+                    
+                    <div id="mobileLoggedIn" class="hidden pt-3 border-t border-gray-200 dark:border-gray-600">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2 space-x-reverse">
+                                <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
+                                    <i class="fas fa-user text-white text-xs"></i>
+                                </div>
+                                <span id="mobileUserName" class="text-sm font-medium text-gray-700 dark:text-gray-300"></span>
+                            </div>
+                            <button onclick="logout(); toggleMobileMenu();" class="text-red-500 hover:text-red-700 transition-colors">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="min-h-screen">
+        <!-- Home Section -->
+        <section id="home" class="section">
+            <!-- Hero -->
+            <div class="bg-gradient-to-r from-primary to-accent text-white py-20">
+                <div class="container mx-auto px-4 text-center">
+                    <h2 class="text-4xl md:text-6xl font-bold mb-6">مرحباً بك في منصة Shamwebs</h2>
+                    <p class="text-xl mb-8 opacity-90">ابتكار رقمي... بثقة وإدراك</p>
+                    <p class="text-lg mb-8 opacity-80">اكتشف مجموعة متنوعة من المتاجر والمنتجات الرقمية</p>
+                    <button onclick="showSection('stores')" class="bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                        استكشف المتاجر
+                    </button>
+                </div>
+            </div>
+
+            <!-- Featured Stores -->
+            <div class="container mx-auto px-4 py-16">
+                <h3 class="text-3xl font-bold text-center mb-12">متاجرنا المميزة</h3>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="store-preview bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center hover:shadow-xl transition-shadow cursor-pointer" onclick="openStore('coffee')">
+                        <div class="w-16 h-16 bg-amber-100 dark:bg-amber-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-coffee text-amber-600 text-2xl"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold mb-2">متجر القهوة العربية</h4>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">أجود أنواع القهوة العربية الأصيلة</p>
+                        <span class="text-sm text-primary font-medium">25 منتج متاح</span>
+                    </div>
+                    
+                    <div class="store-preview bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center hover:shadow-xl transition-shadow cursor-pointer" onclick="openStore('decor')">
+                        <div class="w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-couch text-purple-600 text-2xl"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold mb-2">متجر الديكور</h4>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">قطع ديكور عصرية وأنيقة</p>
+                        <span class="text-sm text-primary font-medium">40 منتج متاح</span>
+                    </div>
+                    
+                    <div class="store-preview bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center hover:shadow-xl transition-shadow cursor-pointer" onclick="openStore('books')">
+                        <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-book text-green-600 text-2xl"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold mb-2">مكتبة الحكمة</h4>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">كتب ومراجع في شتى المجالات</p>
+                        <span class="text-sm text-primary font-medium">150 كتاب متاح</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Digital Products Preview -->
+            <div class="bg-gray-50 dark:bg-gray-800 py-16">
+                <div class="container mx-auto px-4">
+                    <h3 class="text-3xl font-bold text-center mb-12">منتجاتنا الرقمية</h3>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="bg-white dark:bg-gray-700 rounded-xl shadow-lg p-6">
+                            <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center mb-4">
+                                <i class="fas fa-shield-alt text-blue-600 text-xl"></i>
+                            </div>
+                            <h4 class="text-xl font-semibold mb-2">KeynovaLock</h4>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">نظام قفل إدراكي متقدم</p>
+                            <button onclick="viewProduct('keynova')" class="text-primary font-medium hover:underline">عرض التفاصيل →</button>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-700 rounded-xl shadow-lg p-6">
+                            <div class="w-12 h-12 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center mb-4">
+                                <i class="fas fa-eye text-red-600 text-xl"></i>
+                            </div>
+                            <h4 class="text-xl font-semibold mb-2">Rqeeb</h4>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">كشف التزوير البصري الفوري</p>
+                            <button onclick="viewProduct('rqeeb')" class="text-primary font-medium hover:underline">عرض التفاصيل →</button>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-700 rounded-xl shadow-lg p-6">
+                            <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center mb-4">
+                                <i class="fas fa-credit-card text-green-600 text-xl"></i>
+                            </div>
+                            <h4 class="text-xl font-semibold mb-2">Rqeeb Card</h4>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">حماية البطاقات الائتمانية</p>
+                            <button onclick="viewProduct('rqeeb-card')" class="text-primary font-medium hover:underline">عرض التفاصيل →</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stores Section -->
+        <section id="stores" class="section hidden">
+            <div class="container mx-auto px-4 py-16">
+                <h2 class="text-3xl font-bold text-center mb-12">متاجرنا الإلكترونية</h2>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Coffee Store -->
+                    <div class="store-card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                        <div class="h-48 bg-gradient-to-r from-amber-400 to-amber-600 flex items-center justify-center">
+                            <i class="fas fa-coffee text-white text-6xl"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">متجر القهوة العربية</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">أجود أنواع القهوة العربية المحمصة بعناية فائقة</p>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-sm text-gray-500">25 منتج</span>
+                                <div class="flex items-center">
+                                    <span class="text-yellow-400">★★★★★</span>
+                                    <span class="text-sm text-gray-500 mr-2">(4.8)</span>
+                                </div>
+                            </div>
+                            <button onclick="openStore('coffee')" class="w-full bg-primary text-white py-2 rounded-lg hover:bg-secondary transition-colors">
+                                زيارة المتجر
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Decor Store -->
+                    <div class="store-card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                        <div class="h-48 bg-gradient-to-r from-purple-400 to-purple-600 flex items-center justify-center">
+                            <i class="fas fa-couch text-white text-6xl"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">متجر الديكور العصري</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">قطع ديكور منزلية عصرية وأنيقة لجميع الأذواق</p>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-sm text-gray-500">40 منتج</span>
+                                <div class="flex items-center">
+                                    <span class="text-yellow-400">★★★★☆</span>
+                                    <span class="text-sm text-gray-500 mr-2">(4.6)</span>
+                                </div>
+                            </div>
+                            <button onclick="openStore('decor')" class="w-full bg-primary text-white py-2 rounded-lg hover:bg-secondary transition-colors">
+                                زيارة المتجر
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Books Store -->
+                    <div class="store-card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                        <div class="h-48 bg-gradient-to-r from-green-400 to-green-600 flex items-center justify-center">
+                            <i class="fas fa-book text-white text-6xl"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">مكتبة الحكمة</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">مجموعة واسعة من الكتب والمراجع العلمية</p>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-sm text-gray-500">150 كتاب</span>
+                                <div class="flex items-center">
+                                    <span class="text-yellow-400">★★★★★</span>
+                                    <span class="text-sm text-gray-500 mr-2">(4.9)</span>
+                                </div>
+                            </div>
+                            <button onclick="openStore('books')" class="w-full bg-primary text-white py-2 rounded-lg hover:bg-secondary transition-colors">
+                                زيارة المتجر
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Tech Store -->
+                    <div class="store-card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                        <div class="h-48 bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center">
+                            <i class="fas fa-laptop text-white text-6xl"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">متجر التقنية</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">أحدث الأجهزة والإكسسوارات التقنية</p>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-sm text-gray-500">80 منتج</span>
+                                <div class="flex items-center">
+                                    <span class="text-yellow-400">★★★★☆</span>
+                                    <span class="text-sm text-gray-500 mr-2">(4.7)</span>
+                                </div>
+                            </div>
+                            <button onclick="openStore('tech')" class="w-full bg-primary text-white py-2 rounded-lg hover:bg-secondary transition-colors">
+                                زيارة المتجر
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Fashion Store -->
+                    <div class="store-card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                        <div class="h-48 bg-gradient-to-r from-pink-400 to-pink-600 flex items-center justify-center">
+                            <i class="fas fa-tshirt text-white text-6xl"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">متجر الأزياء</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">أحدث صيحات الموضة والأزياء العصرية</p>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-sm text-gray-500">120 منتج</span>
+                                <div class="flex items-center">
+                                    <span class="text-yellow-400">★★★★☆</span>
+                                    <span class="text-sm text-gray-500 mr-2">(4.5)</span>
+                                </div>
+                            </div>
+                            <button onclick="openStore('fashion')" class="w-full bg-primary text-white py-2 rounded-lg hover:bg-secondary transition-colors">
+                                زيارة المتجر
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Health Store -->
+                    <div class="store-card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                        <div class="h-48 bg-gradient-to-r from-emerald-400 to-emerald-600 flex items-center justify-center">
+                            <i class="fas fa-heart text-white text-6xl"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">متجر الصحة والجمال</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">منتجات العناية والصحة الطبيعية</p>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-sm text-gray-500">90 منتج</span>
+                                <div class="flex items-center">
+                                    <span class="text-yellow-400">★★★★★</span>
+                                    <span class="text-sm text-gray-500 mr-2">(4.8)</span>
+                                </div>
+                            </div>
+                            <button onclick="openStore('health')" class="w-full bg-primary text-white py-2 rounded-lg hover:bg-secondary transition-colors">
+                                زيارة المتجر
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Digital Products Section -->
+        <section id="products" class="section hidden">
+            <div class="container mx-auto px-4 py-16">
+                <h2 class="text-3xl font-bold text-center mb-12">منتجاتنا الرقمية</h2>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- KeynovaLock -->
+                    <div class="product-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                        <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-shield-alt text-blue-600 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">🔐 KeynovaLock</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">نظام قفل إدراكي يعيد تعريف التوثيق الشخصي بدون كلمات مرور أو بصمات.</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-2xl font-bold text-primary">مجاني</span>
+                            <span class="text-sm bg-green-100 dark:bg-green-900 text-green-600 px-2 py-1 rounded">متاح الآن</span>
+                        </div>
+                        <div class="flex space-x-2 space-x-reverse">
+                            <a href="https://keynova.vercel.app" target="_blank" class="flex-1 bg-primary text-white text-center py-2 rounded-lg hover:bg-secondary transition-colors">
+                                زيارة الموقع
+                            </a>
+                            <button onclick="addToCart('keynova')" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Rqeeb -->
+                    <div class="product-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                        <div class="w-16 h-16 bg-red-100 dark:bg-red-900 rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-eye text-red-600 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">🕵️‍♂️ Rqeeb</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">أداة كشف التزوير البصري الفوري -- بدون اتصال أو رفع بيانات.</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-2xl font-bold text-primary">مجاني</span>
+                            <span class="text-sm bg-green-100 dark:bg-green-900 text-green-600 px-2 py-1 rounded">متاح الآن</span>
+                        </div>
+                        <div class="flex space-x-2 space-x-reverse">
+                            <a href="https://alkasm1.github.io/Rqeeb1/" target="_blank" class="flex-1 bg-primary text-white text-center py-2 rounded-lg hover:bg-secondary transition-colors">
+                                عرض المشروع
+                            </a>
+                            <button onclick="addToCart('rqeeb')" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Rqeeb Card -->
+                    <div class="product-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                        <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-credit-card text-green-600 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">💳 Rqeeb Card</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">طبقة أمان إضافية للبطاقات الائتمانية والحكومية باستخدام النمط الإدراكي.</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-2xl font-bold text-primary">مجاني</span>
+                            <span class="text-sm bg-green-100 dark:bg-green-900 text-green-600 px-2 py-1 rounded">متاح الآن</span>
+                        </div>
+                        <div class="flex space-x-2 space-x-reverse">
+                            <a href="https://alkasm1.github.io/RKEEB/" target="_blank" class="flex-1 bg-primary text-white text-center py-2 rounded-lg hover:bg-secondary transition-colors">
+                                عرض المشروع
+                            </a>
+                            <button onclick="addToCart('rqeeb-card')" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- AI Assistant -->
+                    <div class="product-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                        <div class="w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-robot text-purple-600 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">🤖 مساعد ذكي</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">مساعد ذكي يدعم اللغة العربية لخدمة العملاء والدعم التقني.</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-2xl font-bold text-primary">قريباً</span>
+                            <span class="text-sm bg-yellow-100 dark:bg-yellow-900 text-yellow-600 px-2 py-1 rounded">قيد التطوير</span>
+                        </div>
+                        <div class="flex space-x-2 space-x-reverse">
+                            <button class="flex-1 bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 text-center py-2 rounded-lg cursor-not-allowed">
+                                قريباً
+                            </button>
+                            <button onclick="addToCart('ai-assistant')" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- E-commerce Platform -->
+                    <div class="product-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                        <div class="w-16 h-16 bg-indigo-100 dark:bg-indigo-900 rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-store text-indigo-600 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">🛒 منصة تجارية</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">منصة تجارة إلكترونية متكاملة مع دعم الدفع الإلكتروني والشحن.</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-2xl font-bold text-primary">$299</span>
+                            <span class="text-sm bg-blue-100 dark:bg-blue-900 text-blue-600 px-2 py-1 rounded">إصدار تجريبي</span>
+                        </div>
+                        <div class="flex space-x-2 space-x-reverse">
+                            <button onclick="buyProduct('ecommerce')" class="flex-1 bg-primary text-white text-center py-2 rounded-lg hover:bg-secondary transition-colors">
+                                شراء الآن
+                            </button>
+                            <button onclick="addToCart('ecommerce')" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                                <i class="fas fa-cart-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Security Analytics -->
+                    <div class="product-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                        <div class="w-16 h-16 bg-orange-100 dark:bg-orange-900 rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-chart-line text-orange-600 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">📊 تحليلات الأمان</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">أدوات تحليل وإعداد تقارير الأمان السيبراني للشركات.</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-2xl font-bold text-primary">$199</span>
+                            <span class="text-sm bg-green-100 dark:bg-green-900 text-green-600 px-2 py-1 rounded">متاح الآن</span>
+                        </div>
+                        <div class="flex space-x-2 space-x-reverse">
+                            <button onclick="buyProduct('security-analytics')" class="flex-1 bg-primary text-white text-center py-2 rounded-lg hover:bg-secondary transition-colors">
+                                شراء الآن
+                            </button>
+                            <button onclick="addToCart('security-analytics')" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                                <i class="fas fa-cart-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section hidden">
+            <div class="container mx-auto px-4 py-16">
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="text-3xl font-bold text-center mb-12">من نحن</h2>
+                    
+                    <div class="grid md:grid-cols-2 gap-12 items-center mb-16">
+                        <div>
+                            <h3 class="text-2xl font-semibold mb-6">Shamwebs Technologies</h3>
+                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-6">
+                                Shamwebs هي شركة تقنية سورية سعودية ناشئة تعمل على تطوير حلول رقمية مبتكرة في مجالات الأمن السيبراني، الحماية الإدراكية، والتجارة الإلكترونية.
+                            </p>
+                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                                نؤمن بأن التقنية يجب أن تكون ذكية، إنسانية، وقابلة للوصول للجميع. نسعى لتوفير منصة شاملة تجمع بين المتاجر الإلكترونية والمنتجات الرقمية المبتكرة.
+                            </p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-primary/10 p-6 rounded-xl text-center">
+                                <div class="text-3xl font-bold text-primary mb-2">50+</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">منتج رقمي</div>
+                            </div>
+                            <div class="bg-secondary/10 p-6 rounded-xl text-center">
+                                <div class="text-3xl font-bold text-secondary mb-2">6</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">متاجر متخصصة</div>
+                            </div>
+                            <div class="bg-accent/10 p-6 rounded-xl text-center">
+                                <div class="text-3xl font-bold text-accent mb-2">1000+</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">عميل راضي</div>
+                            </div>
+                            <div class="bg-green-500/10 p-6 rounded-xl text-center">
+                                <div class="text-3xl font-bold text-green-500 mb-2">24/7</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">دعم فني</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Section -->
+                    <div class="bg-gradient-to-r from-primary to-accent text-white rounded-2xl p-8 text-center">
+                        <h3 class="text-2xl font-bold mb-4">فرص التعاون والاستثمار</h3>
+                        <p class="mb-6 opacity-90">
+                            نبحث عن شركاء يؤمنون بقدرة التقنية على إحداث تغيير فعلي. إذا كنت مستثمرًا أو جهة حاضنة، يسعدنا تواصلك معنا.
+                        </p>
+                        <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-6 md:space-x-reverse">
+                            <a href="mailto:shamwebs1@gmail.com" class="flex items-center space-x-2 space-x-reverse bg-white/20 px-6 py-3 rounded-lg hover:bg-white/30 transition-colors">
+                                <i class="fas fa-envelope"></i>
+                                <span>shamwebs1@gmail.com</span>
+                            </a>
+                            <a href="https://www.facebook.com/profile.php?id=61578212474377" target="_blank" class="flex items-center space-x-2 space-x-reverse bg-white/20 px-6 py-3 rounded-lg hover:bg-white/30 transition-colors">
+                                <i class="fab fa-facebook"></i>
+                                <span>Facebook</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Shopping Cart Modal -->
+    <div id="cartModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-xl max-w-md w-full max-h-screen overflow-y-auto">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-semibold">سلة التسوق</h3>
+                        <button onclick="toggleCart()" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <div id="cartItems" class="space-y-4 mb-6">
+                        <div class="text-center text-gray-500 dark:text-gray-400 py-8">
+                            سلة التسوق فارغة
+                        </div>
+                    </div>
+                    
+                    <div id="cartFooter" class="hidden border-t border-gray-200 dark:border-gray-700 pt-4">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="font-semibold">المجموع:</span>
+                            <span id="cartTotal" class="text-xl font-bold text-primary">$0</span>
+                        </div>
+                        <button onclick="checkout()" class="w-full bg-primary text-white py-3 rounded-lg hover:bg-secondary transition-colors">
+                            إتمام الشراء
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Store Detail Modal -->
+    <div id="storeModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-xl max-w-4xl w-full max-h-screen overflow-y-auto">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 id="storeTitle" class="text-2xl font-bold"></h3>
+                        <button onclick="closeStore()" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <div id="storeContent" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Store products will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-xl max-w-md w-full">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-semibold">تسجيل الدخول</h3>
+                        <button onclick="closeLoginModal()" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <form onsubmit="handleLogin(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">البريد الإلكتروني</label>
+                            <input type="email" id="loginEmail" required 
+                                   class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-2">كلمة المرور</label>
+                            <input type="password" id="loginPassword" required 
+                                   class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                        </div>
+                        
+                        <div class="flex items-center justify-between">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
+                                <span class="mr-2 text-sm">تذكرني</span>
+                            </label>
+                            <button type="button" class="text-sm text-primary hover:underline">نسيت كلمة المرور؟</button>
+                        </div>
+                        
+                        <button type="submit" 
+                                class="w-full bg-primary text-white py-3 rounded-lg hover:bg-secondary transition-colors font-semibold">
+                            تسجيل الدخول
+                        </button>
+                        
+                        <div class="text-center">
+                            <span class="text-sm text-gray-600 dark:text-gray-400">ليس لديك حساب؟ </span>
+                            <button type="button" onclick="switchToRegister()" class="text-sm text-primary hover:underline">إنشاء حساب جديد</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-xl max-w-md w-full">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-semibold">إنشاء حساب جديد</h3>
+                        <button onclick="closeRegisterModal()" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <form onsubmit="handleRegister(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">الاسم الكامل</label>
+                            <input type="text" id="registerName" required 
+                                   class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-2">البريد الإلكتروني</label>
+                            <input type="email" id="registerEmail" required 
+                                   class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-2">رقم الهاتف</label>
+                            <input type="tel" id="registerPhone" required 
+                                   class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-2">كلمة المرور</label>
+                            <input type="password" id="registerPassword" required minlength="6"
+                                   class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-2">تأكيد كلمة المرور</label>
+                            <input type="password" id="registerConfirmPassword" required minlength="6"
+                                   class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                        </div>
+                        
+                        <div>
+                            <label class="flex items-center">
+                                <input type="checkbox" required class="rounded border-gray-300 text-primary focus:ring-primary">
+                                <span class="mr-2 text-sm">أوافق على <a href="#" class="text-primary hover:underline">الشروط والأحكام</a></span>
+                            </label>
+                        </div>
+                        
+                        <button type="submit" 
+                                class="w-full bg-primary text-white py-3 rounded-lg hover:bg-secondary transition-colors font-semibold">
+                            إنشاء الحساب
+                        </button>
+                        
+                        <div class="text-center">
+                            <span class="text-sm text-gray-600 dark:text-gray-400">لديك حساب بالفعل؟ </span>
+                            <button type="button" onclick="switchToLogin()" class="text-sm text-primary hover:underline">تسجيل الدخول</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 dark:bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 space-x-reverse mb-4">
+                        <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                            <i class="fas fa-shopping-bag text-white"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold">Shamwebs</h4>
+                            <p class="text-sm text-gray-400">منصة المتاجر الرقمية</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm">ابتكار رقمي... بثقة وإدراك</p>
+                </div>
+                
+                <div>
+                    <h5 class="font-semibold mb-4">روابط سريعة</h5>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><button onclick="showSection('home')" class="hover:text-white transition-colors">الرئيسية</button></li>
+                        <li><button onclick="showSection('stores')" class="hover:text-white transition-colors">المتاجر</button></li>
+                        <li><button onclick="showSection('products')" class="hover:text-white transition-colors">المنتجات الرقمية</button></li>
+                        <li><button onclick="showSection('about')" class="hover:text-white transition-colors">من نحن</button></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h5 class="font-semibold mb-4">المتاجر</h5>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><button onclick="openStore('coffee')" class="hover:text-white transition-colors">متجر القهوة العربية</button></li>
+                        <li><button onclick="openStore('decor')" class="hover:text-white transition-colors">متجر الديكور</button></li>
+                        <li><button onclick="openStore('books')" class="hover:text-white transition-colors">مكتبة الحكمة</button></li>
+                        <li><button onclick="openStore('tech')" class="hover:text-white transition-colors">متجر التقنية</button></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h5 class="font-semibold mb-4">تواصل معنا</h5>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li>
+                            <a href="mailto:shamwebs1@gmail.com" class="hover:text-white transition-colors">
+                                <i class="fas fa-envelope mr-2"></i>
+                                shamwebs1@gmail.com
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.facebook.com/profile.php?id=61578212474377" target="_blank" class="hover:text-white transition-colors">
+                                <i class="fab fa-facebook mr-2"></i>
+                                Facebook
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-400">
+                <p>© 2025 Shamwebs Technologies. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // Navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.add('hidden'));
+            
+            // Show target section
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // Update nav buttons
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => btn.classList.remove('text-primary', 'font-semibold'));
+            
+            // Close mobile menu
+            document.getElementById('mobileMenu').classList.add('hidden');
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        }
+
+        // Cart functionality
+        let cart = [];
+
+        function toggleCart() {
+            document.getElementById('cartModal').classList.toggle('hidden');
+        }
+
+        function addToCart(productId) {
+            const products = {
+                'keynova': { name: 'KeynovaLock', price: 0 },
+                'rqeeb': { name: 'Rqeeb', price: 0 },
+                'rqeeb-card': { name: 'Rqeeb Card', price: 0 },
+                'ai-assistant': { name: 'مساعد ذكي', price: 0 },
+                'ecommerce': { name: 'منصة تجارية', price: 299 },
+                'security-analytics': { name: 'تحليلات الأمان', price: 199 }
+            };
+
+            const product = products[productId];
+            if (product) {
+                const existingItem = cart.find(item => item.id === productId);
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({
+                        id: productId,
+                        name: product.name,
+                        price: product.price,
+                        quantity: 1
+                    });
+                }
+                updateCartDisplay();
+                showCustomAlert(`تم إضافة ${product.name} إلى سلة التسوق`);
+            }
+        }
+
+        function updateCartDisplay() {
+            const cartCount = document.getElementById('cartCount');
+            const cartItems = document.getElementById('cartItems');
+            const cartFooter = document.getElementById('cartFooter');
+            const cartTotal = document.getElementById('cartTotal');
+
+            cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="text-center text-gray-500 dark:text-gray-400 py-8">
+                        سلة التسوق فارغة
+                    </div>
+                `;
+                cartFooter.classList.add('hidden');
+            } else {
+                cartItems.innerHTML = cart.map(item => `
+                    <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <div>
+                            <h4 class="font-medium">${item.name}</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">الكمية: ${item.quantity}</p>
+                        </div>
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <span class="font-semibold">${item.price === 0 ? 'مجاني' : '$' + (item.price * item.quantity)}</span>
+                            <button onclick="removeFromCart('${item.id}')" class="text-red-500 hover:text-red-700">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+
+                const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                cartTotal.textContent = total === 0 ? 'مجاني' : '$' + total;
+                cartFooter.classList.remove('hidden');
+            }
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartDisplay();
+        }
+
+        function checkout() {
+            showCustomAlert('شكراً لك! سيتم التواصل معك قريباً لإتمام عملية الشراء');
+            cart = [];
+            updateCartDisplay();
+            toggleCart();
+        }
+
+        // Store functionality
+        function openStore(storeId) {
+            const stores = {
+                'coffee': {
+                    title: 'متجر القهوة العربية',
+                    products: [
+                        { name: 'قهوة عربية مطحونة', price: 25, image: '☕' },
+                        { name: 'قهوة تركية فاخرة', price: 30, image: '☕' },
+                        { name: 'قهوة إسبريسو إيطالية', price: 35, image: '☕' },
+                        { name: 'قهوة كولومبية', price: 40, image: '☕' },
+                        { name: 'أكواب قهوة فخارية', price: 15, image: '🏺' },
+                        { name: 'آلة تحضير القهوة', price: 120, image: '⚙️' }
+                    ]
+                },
+                'decor': {
+                    title: 'متجر الديكور العصري',
+                    products: [
+                        { name: 'لوحة فنية عصرية', price: 45, image: '🖼️' },
+                        { name: 'مزهرية سيراميك', price: 25, image: '🏺' },
+                        { name: 'وسادة ديكور ملونة', price: 20, image: '🛏️' },
+                        { name: 'شمعدان نحاسي', price: 35, image: '🕯️' },
+                        { name: 'مرآة حائط دائرية', price: 60, image: '🪞' },
+                        { name: 'نبات صناعي أنيق', price: 30, image: '🌿' }
+                    ]
+                },
+                'books': {
+                    title: 'مكتبة الحكمة',
+                    products: [
+                        { name: 'البرمجة للمبتدئين', price: 20, image: '📚' },
+                        { name: 'تاريخ الحضارة العربية', price: 25, image: '📖' },
+                        { name: 'دليل ريادة الأعمال', price: 30, image: '📘' },
+                        { name: 'كتاب الطبخ العربي', price: 18, image: '📗' },
+                        { name: 'علم النفس التطبيقي', price: 28, image: '📙' },
+                        { name: 'مجموعة قصص أطفال', price: 15, image: '📚' }
+                    ]
+                },
+                'tech': {
+                    title: 'متجر التقنية',
+                    products: [
+                        { name: 'سماعات لاسلكية', price: 80, image: '🎧' },
+                        { name: 'شاحن سريع محمول', price: 25, image: '🔋' },
+                        { name: 'كيبورد ميكانيكي', price: 120, image: '⌨️' },
+                        { name: 'ماوس ألعاب احترافي', price: 60, image: '🖱️' },
+                        { name: 'حامل لابتوب قابل للتعديل', price: 45, image: '💻' },
+                        { name: 'كاميرا ويب عالية الدقة', price: 90, image: '📹' }
+                    ]
+                },
+                'fashion': {
+                    title: 'متجر الأزياء',
+                    products: [
+                        { name: 'قميص قطني كلاسيكي', price: 35, image: '👔' },
+                        { name: 'فستان صيفي أنيق', price: 50, image: '👗' },
+                        { name: 'جاكيت جلد طبيعي', price: 120, image: '🧥' },
+                        { name: 'حذاء رياضي عصري', price: 80, image: '👟' },
+                        { name: 'حقيبة يد جلدية', price: 65, image: '👜' },
+                        { name: 'ساعة يد ذكية', price: 200, image: '⌚' }
+                    ]
+                },
+                'health': {
+                    title: 'متجر الصحة والجمال',
+                    products: [
+                        { name: 'كريم مرطب طبيعي', price: 25, image: '🧴' },
+                        { name: 'زيت أرغان المغربي', price: 30, image: '🌿' },
+                        { name: 'فيتامينات متعددة', price: 20, image: '💊' },
+                        { name: 'صابون طبيعي بالعسل', price: 12, image: '🧼' },
+                        { name: 'شامبو بالأعشاب', price: 18, image: '🧴' },
+                        { name: 'مقشر للجسم طبيعي', price: 22, image: '🌺' }
+                    ]
+                }
+            };
+
+            const store = stores[storeId];
+            if (store) {
+                document.getElementById('storeTitle').textContent = store.title;
+                document.getElementById('storeContent').innerHTML = store.products.map(product => `
+                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4">
+                        <div class="text-4xl text-center mb-3">${product.image}</div>
+                        <h4 class="font-semibold mb-2">${product.name}</h4>
+                        <p class="text-primary font-bold mb-3">$${product.price}</p>
+                        <button onclick="addStoreItemToCart('${storeId}', '${product.name}', ${product.price})" 
+                                class="w-full bg-primary text-white py-2 rounded hover:bg-secondary transition-colors">
+                            إضافة للسلة
+                        </button>
+                    </div>
+                `).join('');
+                document.getElementById('storeModal').classList.remove('hidden');
+            }
+        }
+
+        function closeStore() {
+            document.getElementById('storeModal').classList.add('hidden');
+        }
+
+        function addStoreItemToCart(storeId, productName, price) {
+            const existingItem = cart.find(item => item.name === productName);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: storeId + '-' + productName.replace(/\s+/g, '-'),
+                    name: productName,
+                    price: price,
+                    quantity: 1
+                });
+            }
+            updateCartDisplay();
+            showCustomAlert(`تم إضافة ${productName} إلى سلة التسوق`);
+        }
+
+        function buyProduct(productId) {
+            addToCart(productId);
+            showCustomAlert('تم إضافة المنتج إلى سلة التسوق. يمكنك إتمام عملية الشراء من السلة.');
+        }
+
+        function viewProduct(productId) {
+            const links = {
+                'keynova': 'https://keynova.vercel.app',
+                'rqeeb': 'https://alkasm1.github.io/Rqeeb1/',
+                'rqeeb-card': 'https://alkasm1.github.io/RKEEB/'
+            };
+            
+            if (links[productId]) {
+                window.open(links[productId], '_blank');
+            }
+        }
+
+        // Custom alert function since alert() is not allowed
+        function showCustomAlert(message) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform transition-transform duration-300 translate-x-full';
+            alertDiv.textContent = message;
+            
+            document.body.appendChild(alertDiv);
+            
+            // Trigger animation
+            setTimeout(() => {
+                alertDiv.classList.remove('translate-x-full');
+            }, 100);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                alertDiv.classList.add('translate-x-full');
+                setTimeout(() => {
+                    document.body.removeChild(alertDiv);
+                }, 300);
+            }, 3000);
+        }
+
+        // User Authentication System
+        let currentUser = null;
+
+        // Check if user is logged in (simulate with simple storage since localStorage is not available)
+        function checkUserLogin() {
+            // In a real app, this would check with a backend server
+            // For demo purposes, we'll use a simple in-memory state
+            updateUserInterface();
+        }
+
+        function updateUserInterface() {
+            const notLoggedIn = document.getElementById('notLoggedIn');
+            const loggedIn = document.getElementById('loggedIn');
+            const userName = document.getElementById('userName');
+            
+            // Mobile menu elements
+            const mobileNotLoggedIn = document.getElementById('mobileNotLoggedIn');
+            const mobileLoggedIn = document.getElementById('mobileLoggedIn');
+            const mobileUserName = document.getElementById('mobileUserName');
+
+            if (currentUser) {
+                // Desktop interface
+                notLoggedIn.classList.add('hidden');
+                loggedIn.classList.remove('hidden');
+                userName.textContent = currentUser.name;
+                
+                // Mobile interface
+                mobileNotLoggedIn.classList.add('hidden');
+                mobileLoggedIn.classList.remove('hidden');
+                mobileUserName.textContent = currentUser.name;
+            } else {
+                // Desktop interface
+                notLoggedIn.classList.remove('hidden');
+                loggedIn.classList.add('hidden');
+                
+                // Mobile interface
+                mobileNotLoggedIn.classList.remove('hidden');
+                mobileLoggedIn.classList.add('hidden');
+            }
+        }
+
+        // Login Modal Functions
+        function showLoginModal() {
+            document.getElementById('loginModal').classList.remove('hidden');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.add('hidden');
+        }
+
+        function showRegisterModal() {
+            document.getElementById('registerModal').classList.remove('hidden');
+        }
+
+        function closeRegisterModal() {
+            document.getElementById('registerModal').classList.add('hidden');
+        }
+
+        function switchToRegister() {
+            closeLoginModal();
+            showRegisterModal();
+        }
+
+        function switchToLogin() {
+            closeRegisterModal();
+            showLoginModal();
+        }
+
+        // Handle Login Form
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // Simulate login validation (in real app, this would be done on backend)
+            if (email && password) {
+                // For demo purposes, accept any valid email/password combination
+                currentUser = {
+                    email: email,
+                    name: email.split('@')[0] // Use part before @ as name
+                };
+                
+                updateUserInterface();
+                closeLoginModal();
+                showCustomAlert(`مرحباً ${currentUser.name}! تم تسجيل الدخول بنجاح`);
+                
+                // Clear form
+                document.getElementById('loginEmail').value = '';
+                document.getElementById('loginPassword').value = '';
+            } else {
+                showCustomAlert('يرجى إدخال البريد الإلكتروني وكلمة المرور');
+            }
+        }
+
+        // Handle Registration Form
+        function handleRegister(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const phone = document.getElementById('registerPhone').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+
+            // Validate form
+            if (!name || !email || !phone || !password || !confirmPassword) {
+                showCustomAlert('يرجى ملء جميع الحقول المطلوبة');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showCustomAlert('كلمات المرور غير متطابقة');
+                return;
+            }
+
+            if (password.length < 6) {
+                showCustomAlert('كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+                return;
+            }
+
+            // Simulate registration (in real app, this would be done on backend)
+            currentUser = {
+                name: name,
+                email: email,
+                phone: phone
+            };
+
+            updateUserInterface();
+            closeRegisterModal();
+            showCustomAlert(`مرحباً ${name}! تم إنشاء حسابك بنجاح`);
+            
+            // Clear form
+            document.getElementById('registerName').value = '';
+            document.getElementById('registerEmail').value = '';
+            document.getElementById('registerPhone').value = '';
+            document.getElementById('registerPassword').value = '';
+            document.getElementById('registerConfirmPassword').value = '';
+        }
+
+        // Logout Function
+        function logout() {
+            currentUser = null;
+            updateUserInterface();
+            showCustomAlert('تم تسجيل الخروج بنجاح');
+        }
+
+        // Initialize
+        updateCartDisplay();
+        checkUserLogin();
+    </script>
+</body>
+</html>
